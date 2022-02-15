@@ -28,7 +28,7 @@ locals {
       type = "S"
     }, {
       name = "date"
-      type = "S"
+      type = "N"
     }
   ]
 }

@@ -36,7 +36,7 @@ resource "aws_dynamodb_table" "dynamodb" {
 
   attribute {
     name = "date"
-    type = "S"
+    type = "N"
   }
 
   ttl {
