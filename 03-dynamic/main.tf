@@ -21,6 +21,18 @@ provider "aws" {
   secret_key = var.aws_secret_key_id
 }
 
+locals {
+  dynamodb_attributes = [
+    {
+      name = "id"
+      type = "S"
+    }, {
+      name = "date"
+      type = "S"
+    }
+  ]
+}
+
 resource "aws_dynamodb_table" "dynamodb" {
   name           = "Terraform"
   billing_mode   = "PROVISIONED"
@@ -28,16 +40,6 @@ resource "aws_dynamodb_table" "dynamodb" {
   read_capacity  = 1
   hash_key       = "id"
   range_key      = "date"
-
-  attribute {
-    name = "id"
-    type = "S"
-  }
-
-  attribute {
-    name = "date"
-    type = "S"
-  }
 
   ttl {
     enabled        = true
@@ -47,6 +49,14 @@ resource "aws_dynamodb_table" "dynamodb" {
   tags = {
     Name       = "Terraform"
     CostCenter = "Terraform"
+  }
+
+  dynamic "attribute" {
+    for_each = local.dynamodb_attributes
+    content {
+      name = attribute.value.name
+      type = attribute.value.type
+    }
   }
 }
 
